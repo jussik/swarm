@@ -8,14 +8,13 @@ namespace Swarm.Components
 		public GameObject Target;
 
 		public float Weight { get { return 1; } }
-		public Vector2 GridSize { get { return Size; } }
-
-		private static readonly Vector2 Size = new Vector2(2, 2);
+		public GridPoint GridSize { get; private set; }
 
 		private Rigidbody body;
 
 		private void Start()
 		{
+			GridSize = new GridPoint(2, 2);
 			body = GetComponent<Rigidbody>();
 		}
 
