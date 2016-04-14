@@ -8,16 +8,15 @@ namespace Swarm.Behaviours
 	{
 		public Resource Target;
 
-		private Radar Radar;
-		private Harvester Harvester;
-		private SimpleMovement Mover;
+		private Radar radar;
+		private Harvester harvester;
+		private SimpleMovement mover;
 
 		private void Start()
 		{
-			Radar = GetComponent<Radar>();
-			Harvester = GetComponent<Harvester>();
-			Mover = GetComponent<SimpleMovement>();
-			GetTarget();
+			radar = GetComponent<Radar>();
+			harvester = GetComponent<Harvester>();
+			mover = GetComponent<SimpleMovement>();
 		}
 
 		private void Update()
@@ -27,15 +26,15 @@ namespace Swarm.Behaviours
 
 		private void GetTarget()
 		{
-			if (Harvester.Target != null || Mover.Target != null)
+			if (harvester.Target != null || mover.Target != null)
 				return;
 
-			Target = Radar.Contacts.OfType<Resource>()
+			Target = radar.Contacts.OfType<Resource>()
 				.Where(r => r != null)
 				.MinBy(r => (transform.position - r.transform.position).sqrMagnitude);
 
 			if (Target != null)
-				Mover.Target = Target;
+				mover.Target = Target;
 		}
 	}
 }
