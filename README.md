@@ -1,32 +1,24 @@
 ##things
 
-###hull type
-* base cost
-* initial health
-* weight limit
-* bot radius (for drawing and collider radius)
-* component grid size (e.g. 5x5)
+###bot
+* hull
+* contacts (e.g. bots or resources, by default only touching contacts, can be improved using radar or swarm comms)
+* scripts
 
 ###hull
+* level
 * health
+* weight limit
+* base cost
 * list of components
 * grid of attached components
-* bot radius
+* bot radius (for drawing and collider radius)
 
-###bot type
-* hull type
-* list of components
-* grid of attached components
-* list of custom scripts
-
-###bot (created from bot type)
-* hull
-* contacts (by default only touching contacts, can be improved using radar or swarm comms)
-
-###component type
+###component
+* level
 * weight
 * cost
-* size (e.g. 2x1)
+* size in grid (e.g. 2x1)
 * parameters (see component types for examples)
 
 ###component types (higher levels means better parameters, more weight, cost, size)
