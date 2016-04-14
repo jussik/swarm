@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Swarm.Attachables;
-using UnityEngine;
 
 namespace Swarm.Behaviours
 {
@@ -9,18 +8,22 @@ namespace Swarm.Behaviours
 		private Radar radar;
 		private Harvester harvester;
 		private SimpleMovement mover;
-		private float? sleepUntil;
+		private bool active;
 
 		private void Start()
 		{
 			radar = GetComponent<Radar>();
 			harvester = GetComponent<Harvester>();
 			mover = GetComponent<SimpleMovement>();
+
+			radar.RadarContactEvent += (o, a) => active = true;
+
+			active = true;
 		}
 
 		private void Update()
 		{
-			if (harvester.Target != null || mover.Target != null || Time.time < sleepUntil)
+			if (!active || harvester.Target != null || mover.Target != null)
 				return;
 
 			var nextTarget = radar.Contacts.OfType<Resource>()
@@ -28,11 +31,9 @@ namespace Swarm.Behaviours
 				.MinBy(r => (transform.position - r.transform.position).sqrMagnitude);
 
 			if (nextTarget != null)
-			{
 				mover.Target = nextTarget;
-				sleepUntil = 0.0f;
-			}
-			else sleepUntil = Time.time + 1.0f; // do not check again until a second from now
+			else
+				active = false;
 		}
 	}
 }
