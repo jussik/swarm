@@ -15,6 +15,8 @@ namespace Swarm.Attachables
 		public readonly HashSet<Resource> AvailableTargets = new HashSet<Resource>();
 		public Resource Target;
 
+		public event EventHandler TargetChanged;
+
 		private void Start()
 		{
 			var bot = GetComponent<Bot>();
@@ -32,9 +34,10 @@ namespace Swarm.Attachables
 			if (toHarvest > Target.Value)
 			{
 				AmountStored += Target.Value;
+				Target.Value = 0;
 				Destroy(Target.gameObject);
 				AvailableTargets.Remove(Target);
-				SwitchTarget();
+				SetTarget();
 			}
 			else
 			{
@@ -50,7 +53,7 @@ namespace Swarm.Attachables
 			{
 				AvailableTargets.Add(res);
 				if (Target == null)
-					Target = res;
+					SetTarget();
 			}
 		}
 
@@ -61,13 +64,22 @@ namespace Swarm.Attachables
 			{
 				AvailableTargets.Remove(res);
 				if(Target == res)
-					SwitchTarget();
+					SetTarget();
 			}
 		}
 
-		private void SwitchTarget()
+		private void OnTargetChanged()
 		{
+			if(TargetChanged != null)
+				TargetChanged(this, EventArgs.Empty);
+		}
+
+		private void SetTarget()
+		{
+			var prev = Target;
 			Target = AvailableTargets.FirstOrDefault();
+			if(prev != Target)
+				OnTargetChanged();
 		}
 	}
 }

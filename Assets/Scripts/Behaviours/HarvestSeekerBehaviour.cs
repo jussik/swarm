@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Swarm.Attachables;
+using UnityEngine;
 
 namespace Swarm.Behaviours
 {
@@ -8,7 +12,9 @@ namespace Swarm.Behaviours
 		private Radar radar;
 		private Harvester harvester;
 		private SimpleMovement mover;
-		private bool active;
+
+		private enum State { Idle, Harvesting }
+		private State state;
 
 		private void Start()
 		{
@@ -16,24 +22,76 @@ namespace Swarm.Behaviours
 			harvester = GetComponent<Harvester>();
 			mover = GetComponent<SimpleMovement>();
 
-			radar.RadarContactEvent += (o, a) => active = true;
-
-			active = true;
+			// TODO: replace with proper state transition table
+			Transition(State.Harvesting);
 		}
 
-		private void Update()
+		private void Transition(State newState)
 		{
-			if (!active || harvester.Target != null || mover.Target != null)
-				return;
+			StartCoroutine(TransitionCoroutine(newState));
+		}
+		private IEnumerator TransitionCoroutine(State newState)
+		{
+			ExitState();
+			yield return null;
+			state = newState;
+			EnterState();
+		}
 
-			var nextTarget = radar.Contacts.OfType<Resource>()
+		private void ExitState()
+		{
+			switch (state)
+			{
+				case State.Idle:
+					radar.RadarContactEvent -= OnRadarContact;
+					break;
+				case State.Harvesting:
+					harvester.TargetChanged -= HarvesterTargetChanged;
+					break;
+			}
+		}
+
+		private void EnterState()
+		{
+			switch (state)
+			{
+				case State.Idle:
+					radar.RadarContactEvent += OnRadarContact;
+					break;
+				case State.Harvesting:
+					harvester.TargetChanged += HarvesterTargetChanged;
+					Seek();
+					break;
+			}
+		}
+
+		private void HarvesterTargetChanged(object sender, EventArgs eventArgs)
+		{
+			if(harvester.Target == null)
+				Seek();
+		}
+
+		private void Seek()
+		{
+			StartCoroutine(SeekCoroutine());
+		}
+		private IEnumerator SeekCoroutine()
+		{
+			yield return null;
+			var target = radar.Contacts.OfType<Resource>()
 				.Where(r => r != null)
 				.MinBy(r => (transform.position - r.transform.position).sqrMagnitude);
 
-			if (nextTarget != null)
-				mover.Target = nextTarget;
+			if (target != null)
+				mover.MoveTo(target);
 			else
-				active = false;
+				Transition(State.Idle);
+		}
+
+		private void OnRadarContact(object sender, RadarContactArgs radarContactArgs)
+		{
+			if (radarContactArgs.Contact is Resource && !radarContactArgs.ContactRemoved)
+				Transition(State.Harvesting);
 		}
 	}
 }

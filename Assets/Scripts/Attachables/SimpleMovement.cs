@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Swarm.Attachables
 {
@@ -6,6 +7,8 @@ namespace Swarm.Attachables
 	{
 		public Contactable Target;
 		public float Speed = 2.0f;
+
+		public event EventHandler TargetChanged;
 
 		private Rigidbody body;
 
@@ -17,10 +20,22 @@ namespace Swarm.Attachables
 				RadiusTrigger.Create(transform, Layers.Sight, bot.ContactRadius + 0.1f, OnTouch);
 		}
 
+		public void MoveTo(Contactable contact)
+		{
+			if (Target != contact)
+			{
+				OnTargetChanged();
+				Target = contact;
+			}
+		}
+
 		private void OnTouch(Contactable contact)
 		{
 			if (contact == Target)
+			{
 				Target = null;
+				OnTargetChanged();
+			}
 		}
 
 		private void FixedUpdate()
@@ -36,6 +51,12 @@ namespace Swarm.Attachables
 			{
 				body.velocity = Vector3.zero;
 			}
+		}
+
+		private void OnTargetChanged()
+		{
+			if (TargetChanged != null)
+				TargetChanged(this, EventArgs.Empty);
 		}
 	}
 }
