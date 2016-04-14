@@ -1,61 +1,51 @@
-##things
+## Things
 
-###bot
-* hull
-* contacts (e.g. bots or resources, by default only touching contacts, can be improved using radar or swarm comms)
-* scripts
+### Component classes
+* IContactable: Anything in the game world a bot can know about
+  * Bot: A single robotic unit
+  * IAttachable: Things you can attach to a bot to make it do stuff (see Attachable types)
+  * Resource: Collect this stuff to make more bots
+* Script: An executable script which allows the Bot to do things with its Attachments and Contacts
 
-###hull
+### Non-component classes
+* Contact: An IContactable reference and details about how it was detected (touch, radar, swarm, etc.)
+
+### Bot
 * level
 * health
 * weight limit
 * base cost
-* list of components
-* grid of attached components
-* bot radius (for drawing and collider radius)
+* list of attachables
+* grid of attached attachables
+* bot radius
+* contacts (e.g. bots or resources, by default only touching contacts, can be improved using radar or swarm comms)
+* scripts
 
-###component
+### Attachable
 * level
 * weight
 * cost
 * size in grid (e.g. 2x1)
-* parameters (see component types for examples)
-
-###component types (higher levels means better parameters, more weight, cost, size)
-* swarm comms (range) -- joins swarm if within distance, allows communication and sharing of contacts
-* factory (max hull/component level) -- create bots
-* hover (accel, speed, turning)
-* treads (accel, speed, turning)
-* armour (durability) -- prevents hull damage, does not recharge
-* shield (durability, recharge rate) -- prevents hull damage, recharges using power
-* laser (range, damage per second, power drain)
-* self destruct mechanism (range, damage)
-* harvester (range, ore per second, capacity)
-* ore hopper (capacity)
-* radar (range) -- increases contacts
-* battery (capacity)
-* reactor (power)
-* charging coil (range, power, number of bots) -- charges other bots' batteries
-* repair arm (range, durability per second, number of bots) -- repairs own and other bots' armour
-* remote hacking (range, max level, number of bots) -- allows reading (potentially writing) of bots' components and scripts
-
-###component instance (entity, as it needs to be able to be dropped on the ground)
+* parameters (see attachable types for examples)
 * is enabled
-* is attached
-* parent (bot)
+* parent (Bot)
+* grid slot (if attached to grid)
 
-###contact (each entity a bot knows about)
+### Resource
+* value
+
+### Contact
 * entity
 * contact type (flags: physical=1, radar=2, swarm=4)
 
-##scripting
+## Scripting
 
-###actions
+### Actions
 * included with hull:
-  * detach component (detaches from grid, but does not remove weight)
-  * attach component (must be in storage)
-  * drop component
-  * take component
+  * detach attachable (detaches from grid, but does not remove weight)
+  * attach attachable (must be in storage)
+  * drop attachable
+  * take attachable
 * movement (target may be coordinate or contact):
   * go to target
   * orbit around target
@@ -66,11 +56,12 @@
 * weapon (target may be coordinate or contact):
   * attack target
 
-###functions
+### Functions
 * get user defined targets (user clicks on location, bot, etc. to set)
 
-###expressions
-**NOTE: look into unity's and unreal's node based scripting**
+### Expressions
+**NOTE: look into unreal's node based scripting**
+
 * if/switch,
 * filter
 * compare
@@ -78,12 +69,30 @@
 * log
 * of type
 
-###utilities
+### Utilities
 * timer
 
-##notes
+## Notes
 
-###example bot types
+### Attachable types
+* Swarm comms (range) -- joins swarm if within distance, allows communication and sharing of contacts
+* Factory (max hull/attachable level) -- create bots
+* Hover (accel, speed, turning)
+* Treads (accel, speed, turning)
+* Armour (durability) -- prevents hull damage, does not recharge
+* Shield (durability, recharge rate) -- prevents hull damage, recharges using power
+* Laser (range, damage per second, power drain)
+* Self destruct mechanism (range, damage)
+* Harvester (range, ore per second, capacity)
+* Ore hopper (capacity)
+* Radar (range) -- increases contacts
+* Battery (capacity)
+* Reactor (power)
+* Charging coil (range, power, number of bots) -- charges other bots' batteries
+* Repair arm (range, durability per second, number of bots) -- repairs own and other bots' armour
+* Remote hacking (range, max level, number of bots) -- allows reading (potentially writing) of bots' attachables and scripts
+
+### Example Bot types
 * base
   * reactor
   * factory

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Swarm.Components
+namespace Swarm
 {
 	public struct GridPoint
 	{
@@ -17,10 +15,5 @@ namespace Swarm.Components
 		{
 			return new GridPoint(a.X + b.X, a.Y + b.Y);
 		}
-	}
-	public interface IBotComponent
-	{
-		float Weight { get; }
-		GridPoint GridSize { get; }
 	}
 }

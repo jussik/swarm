@@ -1,36 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using Swarm.Components;
+using Swarm.Attachables;
 using UnityEngine;
 
 namespace Swarm
 {
-	public class Hull : MonoBehaviour
+	public class Grid : MonoBehaviour
 	{
-		public float WeightLimit { get { return 10.0f; } }
+		public int Width;
+		public int Height;
 
-		private readonly IBotComponent[,] grid;
+		private GridPoint size;
+		private Attachable[,] grid;
 
-		public Hull()
+		private void Start()
 		{
-			grid = new IBotComponent[5, 5];
+			size = new GridPoint(Width, Height);
+			grid = new Attachable[size.X, size.Y];
 		}
 
-		public bool CanAttachComponent(IBotComponent comp, GridPoint pos)
+		public bool CanAttachComponent(Attachable comp, GridPoint pos)
 		{
 			return !TryAttachComponentInternal(comp, pos, false);
 		}
 
-		public bool TryAttachComponent(IBotComponent comp, GridPoint pos)
+		public bool TryAttachComponent(Attachable comp, GridPoint pos)
 		{
 			return TryAttachComponentInternal(comp, pos, true);
 		}
 
-		private bool TryAttachComponentInternal(IBotComponent comp, GridPoint pos, bool attach)
+		private bool TryAttachComponentInternal(Attachable comp, GridPoint pos, bool attach)
 		{
-			var end = pos + comp.GridSize;
+			var end = pos + new GridPoint(comp.GridWidth, comp.GridHeight);
 			if (pos.X < 0 || pos.Y < 0
-				|| end.X >= grid.GetLength(0) || end.Y >= grid.GetLength(1)
+				|| end.X >= size.X || end.Y >= size.Y
 				|| AreaHasComponent(pos, end))
 				return false;
 
