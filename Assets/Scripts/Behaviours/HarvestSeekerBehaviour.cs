@@ -1,16 +1,14 @@
 ﻿using System.Linq;
 using Swarm.Attachables;
-using UnityEngine;
 
 namespace Swarm.Behaviours
 {
 	public class HarvestSeekerBehaviour : Behaviour
 	{
-		public Resource Target;
-
 		private Radar radar;
 		private Harvester harvester;
 		private SimpleMovement mover;
+		private Resource target;
 
 		private void Start()
 		{
@@ -21,20 +19,15 @@ namespace Swarm.Behaviours
 
 		private void Update()
 		{
-			GetTarget();
-		}
-
-		private void GetTarget()
-		{
 			if (harvester.Target != null || mover.Target != null)
 				return;
 
-			Target = radar.Contacts.OfType<Resource>()
+			target = radar.Contacts.OfType<Resource>()
 				.Where(r => r != null)
 				.MinBy(r => (transform.position - r.transform.position).sqrMagnitude);
 
-			if (Target != null)
-				mover.Target = Target;
+			if (target != null)
+				mover.Target = target;
 		}
 	}
 }
