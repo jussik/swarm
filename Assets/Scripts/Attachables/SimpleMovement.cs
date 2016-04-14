@@ -4,7 +4,7 @@ namespace Swarm.Attachables
 {
 	public class SimpleMovement : Attachable
 	{
-		public GameObject Target;
+		public Contactable Target;
 		public float Speed = 2.0f;
 
 		private Rigidbody body;
@@ -12,6 +12,15 @@ namespace Swarm.Attachables
 		protected void Start()
 		{
 			body = GetComponent<Rigidbody>();
+			var bot = GetComponent<Bot>();
+			if(bot != null)
+				RadiusTrigger.Create(transform, Layers.Sight, bot.ContactRadius + 0.1f, OnTouch);
+		}
+
+		private void OnTouch(Contactable contact)
+		{
+			if (contact == Target)
+				Target = null;
 		}
 
 		private void FixedUpdate()

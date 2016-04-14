@@ -2,8 +2,8 @@
 
 namespace Swarm
 {
-	class Resource : Contactable
+	public class Resource : Contactable
 	{
-		public int Value = 1000;
+		public float Value = 1000;
 	}
 }
