@@ -1,13 +1,13 @@
 ##things
 
-###bot hull type
+###hull type
 * base cost
 * initial health
 * weight limit
 * bot radius (for drawing and collider radius)
 * component grid size (e.g. 5x5)
 
-##hull
+###hull
 * health
 * list of components
 * grid of attached components
