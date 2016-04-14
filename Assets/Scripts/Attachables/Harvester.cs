@@ -12,8 +12,8 @@ namespace Swarm.Attachables
 		public float Capacity = 700.0f;
 		public float AmountStored;
 
-		private readonly HashSet<Resource> availableTargets = new HashSet<Resource>();
-		private Resource target;
+		public readonly HashSet<Resource> AvailableTargets = new HashSet<Resource>();
+		public Resource Target;
 
 		private void Start()
 		{
@@ -25,20 +25,20 @@ namespace Swarm.Attachables
 		// NOTE: in FixedUpdate because fixedDeltaTime ensures we don't get float errors
 		private void FixedUpdate()
 		{
-			if(target == null || AmountStored >= Capacity)
+			if(Target == null || AmountStored >= Capacity)
 				return;
 
 			var toHarvest = Math.Min(HarvestRate * Time.fixedDeltaTime, Capacity - AmountStored);
-			if (toHarvest > target.Value)
+			if (toHarvest > Target.Value)
 			{
-				AmountStored += target.Value;
-				Destroy(target.gameObject);
-				availableTargets.Remove(target);
+				AmountStored += Target.Value;
+				Destroy(Target.gameObject);
+				AvailableTargets.Remove(Target);
 				SwitchTarget();
 			}
 			else
 			{
-				target.Value -= toHarvest;
+				Target.Value -= toHarvest;
 				AmountStored += toHarvest;
 			}
 		}
@@ -48,9 +48,9 @@ namespace Swarm.Attachables
 			var res = contact as Resource;
 			if (res != null)
 			{
-				availableTargets.Add(res);
-				if (target == null)
-					target = res;
+				AvailableTargets.Add(res);
+				if (Target == null)
+					Target = res;
 			}
 		}
 
@@ -59,15 +59,15 @@ namespace Swarm.Attachables
 			var res = contact as Resource;
 			if (res != null)
 			{
-				availableTargets.Remove(res);
-				if(target == res)
+				AvailableTargets.Remove(res);
+				if(Target == res)
 					SwitchTarget();
 			}
 		}
 
 		private void SwitchTarget()
 		{
-			target = availableTargets.FirstOrDefault();
+			Target = AvailableTargets.FirstOrDefault();
 		}
 	}
 }
