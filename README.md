@@ -1,16 +1,17 @@
 ##things
 
-###entity (all potentially physical objects; bots, ore, components, etc.)
-* location (optional)
-* renderer (optional)
-* collider (optional)
-
 ###bot hull type
 * base cost
 * initial health
 * weight limit
-* radius (for drawing and collider radius)
+* bot radius (for drawing and collider radius)
 * component grid size (e.g. 5x5)
+
+##hull
+* health
+* list of components
+* grid of attached components
+* bot radius
 
 ###bot type
 * hull type
@@ -18,8 +19,8 @@
 * grid of attached components
 * list of custom scripts
 
-###bot instance (created from bot type)
-* health
+###bot (created from bot type)
+* hull
 * contacts (by default only touching contacts, can be improved using radar or swarm comms)
 
 ###component type
@@ -29,21 +30,22 @@
 * parameters (see component types for examples)
 
 ###component types (higher levels means better parameters, more weight, cost, size)
-* swarm comms (distance) -- joins swarm if within distance, allows communication and sharing of contacts
+* swarm comms (range) -- joins swarm if within distance, allows communication and sharing of contacts
 * factory (max hull/component level) -- create bots
 * hover (accel, speed, turning)
 * treads (accel, speed, turning)
 * armour (durability) -- prevents hull damage, does not recharge
 * shield (durability, recharge rate) -- prevents hull damage, recharges using power
-* laser (damage per second)
-* self destruct mechanism (damage)
-* harvester (distance, ore per second, capacity)
+* laser (range, damage per second, power drain)
+* self destruct mechanism (range, damage)
+* harvester (range, ore per second, capacity)
 * ore hopper (capacity)
-* radar (distance) -- increases contacts
+* radar (range) -- increases contacts
 * battery (capacity)
 * reactor (power)
-* charging coil (distance, power, number of bots) -- charges other bots' batteries
-* repair arm (distance, durability per second, number of bots) -- repairs own and other bots' armour
+* charging coil (range, power, number of bots) -- charges other bots' batteries
+* repair arm (range, durability per second, number of bots) -- repairs own and other bots' armour
+* remote hacking (range, max level, number of bots) -- allows reading (potentially writing) of bots' components and scripts
 
 ###component instance (entity, as it needs to be able to be dropped on the ground)
 * is enabled
