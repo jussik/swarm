@@ -1,0 +1,34 @@
+{
+  "initialState": "harvesting",
+  "self": { "id": "#self" },
+  "states": {
+    "idle": {
+      "events": [{
+        "component": "Radar",
+        "event": "RadarContactEvent",
+        "outputs": {
+          "Contact": { "id": "#radarContact" },
+          "ContactRemoved": { "id": "#radarContactIsRemoved" }
+        }
+      }],
+      "nodes": [{
+        "type": "ofType",
+        "source": { "$ref": "#radarContact" },
+        "itemType": "Resource",
+        "output": { "id": "#contactAsResource" }
+      }, {
+        "type": "boolOp",
+        "op": "and",
+        "sources": [
+          { "id": "#contactAsResource" },
+          { "id": "#radarContactIsRemoved" }
+        ],
+        "output": { "id": "#contactIsResAndNotRemoved" }
+      }, {
+        "type": "transition",
+        "when": { "$ref": "#contactIsResAndNotRemoved" },
+        "state": "harvesting"
+      }]
+    }
+  }
+}
