@@ -11,31 +11,36 @@ namespace Swarm.Attachables
 		public event EventHandler TargetChanged;
 
 		private Rigidbody body;
+		private float boundaryRadius;
 
 		protected void Start()
 		{
 			body = GetComponent<Rigidbody>();
 			var bot = GetComponent<Bot>();
 			if(bot != null)
-				RadiusTrigger.Create(transform, Layers.Sight, bot.ContactRadius + 0.1f, OnTouch);
+			{
+				boundaryRadius = bot.ContactRadius + 0.1f;
+				RadiusTrigger.Create(transform, Layers.Sight, boundaryRadius, OnTouch);
+			}
+		}
+
+		public void Stop()
+		{
+			if (Target != null)
+				SetTarget(null);
 		}
 
 		public void MoveTo(Contactable contact)
 		{
-			if (Target != contact)
-			{
-				OnTargetChanged();
-				Target = contact;
-			}
+			if (contact != null && Target != contact
+				&& Vector3.Distance(transform.position, contact.transform.position) > boundaryRadius + contact.ContactRadius)
+				SetTarget(contact);
 		}
 
 		private void OnTouch(Contactable contact)
 		{
 			if (contact == Target)
-			{
-				Target = null;
-				OnTargetChanged();
-			}
+				SetTarget(null);
 		}
 
 		private void FixedUpdate()
@@ -53,10 +58,14 @@ namespace Swarm.Attachables
 			}
 		}
 
-		private void OnTargetChanged()
+		private void SetTarget(Contactable contact)
 		{
-			if (TargetChanged != null)
-				TargetChanged(this, EventArgs.Empty);
+			if (Target != contact)
+			{
+				Target = contact;
+				if (TargetChanged != null)
+					TargetChanged(this, EventArgs.Empty);
+			}
 		}
 	}
 }

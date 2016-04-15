@@ -2,7 +2,8 @@
 
 namespace Swarm
 {
-	public abstract class Behaviour : MonoBehaviour
+	public abstract class Behaviour<TState> : MonoBehaviour
 	{
+		public TState initialState;
 	}
 }

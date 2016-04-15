@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Swarm.Behaviours
 {
-	public class HarvestSeekerBehaviour : Behaviour
+	public class HarvestSeekerBehaviour : MonoBehaviour
 	{
 		private Radar radar;
 		private Harvester harvester;
@@ -28,12 +28,7 @@ namespace Swarm.Behaviours
 
 		private void Transition(State newState)
 		{
-			StartCoroutine(TransitionCoroutine(newState));
-		}
-		private IEnumerator TransitionCoroutine(State newState)
-		{
 			ExitState();
-			yield return null;
 			state = newState;
 			EnterState();
 		}
@@ -73,13 +68,8 @@ namespace Swarm.Behaviours
 
 		private void Seek()
 		{
-			StartCoroutine(SeekCoroutine());
-		}
-		private IEnumerator SeekCoroutine()
-		{
-			yield return null;
 			var target = radar.Contacts.OfType<Resource>()
-				.Where(r => r != null)
+				.Where(r => r.Value > 0)
 				.MinBy(r => (transform.position - r.transform.position).sqrMagnitude);
 
 			if (target != null)

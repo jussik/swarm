@@ -122,3 +122,57 @@
   * movement
   * reactor
   * factory
+
+## Script brainstorming
+
+### Harvester script:
+
+**Events (Triggers:out)**
+
+* OnBegin
+* Radar.OnNewContact(Type) -> Contact
+* Harvester.OnHarvestingFinished
+* Harvester.OnUnloadFinished
+
+**Values (Triggers:none)**
+
+* Harvester.IsFull -> Value
+
+**Functions (Triggers:in+out)**
+
+* Radar.GetNearestContact(Type) -> Contact [Success,Fail]
+* If(Condition) [Then,Else]
+
+**Actions (Triggers:in)**
+
+* Mover.Move(Target)
+* Transition(State)
+
+**States:**
+
+Idle:
+
+1. Radar.OnNewContact(Resource):2
+2. Transition(harvest)
+3. Radar.OnNewContact(Factory):4
+4. Transition(unload)
+
+Harvest:
+
+1. OnBegin:4
+2. Harvester.OnHarvestingFinished:4
+3. Harvester.IsFull
+4. If(3.Value) Then:8, Else:5
+5. GetNearestContact(Resource) Success:6, Fail:7
+6. Move(5.Contact)
+7. Transition(idle)
+8. Transition(unload)
+
+Unload:
+
+1. OnBegin:2
+2. GetNearestContact(Factory) Success:3, Fail:4
+3. Mover.Move(2.Contact)
+4. Transition(idle)
+5. Harvester.OnUnloadFinished:6
+6. Transition(harvest)

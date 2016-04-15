@@ -35,7 +35,6 @@ namespace Swarm.Attachables
 			{
 				AmountStored += Target.Value;
 				Target.Value = 0;
-				Destroy(Target.gameObject);
 				AvailableTargets.Remove(Target);
 				SetTarget();
 			}
@@ -63,15 +62,9 @@ namespace Swarm.Attachables
 			if (res != null)
 			{
 				AvailableTargets.Remove(res);
-				if(Target == res)
+				if(res == Target)
 					SetTarget();
 			}
-		}
-
-		private void OnTargetChanged()
-		{
-			if(TargetChanged != null)
-				TargetChanged(this, EventArgs.Empty);
 		}
 
 		private void SetTarget()
@@ -79,7 +72,10 @@ namespace Swarm.Attachables
 			var prev = Target;
 			Target = AvailableTargets.FirstOrDefault();
 			if(prev != Target)
-				OnTargetChanged();
+			{
+				if(TargetChanged != null)
+					TargetChanged(this, EventArgs.Empty);
+			}
 		}
 	}
 }
