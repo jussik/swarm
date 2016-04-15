@@ -1,0 +1,73 @@
+initialState: harvesting
+self: &self
+states:
+  idle: &idleState
+    events:
+    - component: Radar
+      event: RadarContactEvent
+      outputs:
+        Contact: &radarContact
+        ContactRemoved: &radarContactIsRemoved
+    nodes:
+    - type: ofType
+      source: *radarContact
+      itemType: Resource
+      output: &contactAsResource
+    - type: boolOp
+      op: and
+      sources:
+      - *contactAsResource
+      - *radarContactIsRemoved
+      output: &contactIsResAndNotRemoved
+    - type: transition
+      if: *contactIsResAndNotRemoved
+      state: *harvestingState
+  harvesting: &harvestingState
+    onEnter: &onEnter
+    events:
+    - component: Harvester
+      event: TargetChanged
+      outputs:
+        Target: &harvesterEventTarget
+    actions:
+    - &seekAction
+      name: Seek
+      outputs: &seekCall
+    nodes:
+    - type: callAction
+      when: *onEnter
+      action: *seekAction
+    - type: callAction
+      when: *harvesterEventTarget
+      action: *seekAction
+    - type: getComponentProperty
+      component: Harvester
+      property: Target
+      output: &harvesterTarget
+    - type: if
+      if: *harvesterTarget
+      else: &noHarvesterTarget
+    - type: getComponentProperty
+      component: Radar
+      property: Contacts
+      output: &radarContacts
+    - type: ofType
+      source: *radarContacts
+      itemType: Resource
+      output: &radarResources
+    - type: getNearest
+      position: *self
+      stream: *radarResources
+      output: &closestResource
+    - type: if
+      if: *closestResource
+      then: &moveToResource
+      else: &noContacts
+    - type: callAction
+      when: *moveToResource
+      action: *moveTo
+      params: *closestResource
+    - type: transition
+      if: *noContacts
+      state: *idleState
+      
