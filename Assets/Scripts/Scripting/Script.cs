@@ -11,27 +11,6 @@ namespace Swarm.Scripting
 	public class ScriptDefinition
 	{
 		public string InitialState;
-		public Dictionary<string, StateDefinition> States;
-	}
-
-	public class StateDefinition
-	{
-		public List<EventDefinition> Events;
-		public List<NodeDefinition> Nodes;
-	}
-
-	public class NodeDefinition
-	{
-		public string Type;
-		public Dictionary<string, JToken> Inputs;
-		public Dictionary<string, int> Outputs;
-	}
-
-	public class EventDefinition
-	{
-		public string Component;
-		public string Event;
-		public Dictionary<string, int> Outputs;
 	}
 
 	public class Script

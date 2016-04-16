@@ -125,54 +125,126 @@
 
 ## Script brainstorming
 
-### Harvester script:
+A script is a number of node definitions optionally grouped by states.
+Must be kept in a format that is easily representable using nodes in flow based programming.
 
-**Events (Triggers:out)**
+TODO: nested states, variables
 
-* OnBegin
-* Radar.OnNewContact(Type) -> Contact
-* Harvester.OnHarvestingFinished
-* Harvester.OnUnloadFinished
+### Script language
 
-**Values (Triggers:none)**
+**State**
 
-* Harvester.IsFull -> Value
+A *state* encompasses processes and event handlers.
+Once a *state* is exited, its event handlers will be unregistered.
 
-**Functions (Triggers:in+out)**
+Define a *state*: `#stateName`.
 
-* Radar.GetNearestContact(Type) -> Contact [Success,Fail]
-* If(Condition) [Then,Else]
+**Nodes**
 
-**Actions (Triggers:in)**
+A *node* encompasses a single executable statement.
 
-* Mover.Move(Target)
-* Transition(State)
+```
+:getRes Radar.GetNearest(Resource) .then -> :moveToRes
+|_____/ |______________/|________/ |______/ |________/
+|label  |node function  |arguments |trigger |expression
+```
 
-**States:**
+**Label** (optional):
+Gives a name to this node so it may be referred to elsewhere. Always begins with `:`.
 
-Idle:
+**Function**:
+The function the node will execute, e.g. `Harvester.IsFull` or `If`.
 
-1. Radar.OnNewContact(Resource):2
-2. Transition(harvest)
-3. Radar.OnNewContact(Factory):4
-4. Transition(unload)
+**Arguments** (optional, multiple):
+Arguments to pass to the function. Parentheses may be omitted if no arguments required.
 
-Harvest:
+An argument may be one of the following:
 
-1. OnBegin:4
-2. Harvester.OnHarvestingFinished:4
-3. Harvester.IsFull
-4. If(3.Value) Then:8, Else:5
-5. GetNearestContact(Resource) Success:6, Fail:7
-6. Move(5.Contact)
-7. Transition(idle)
-8. Transition(unload)
+* An input port on the current node `.value`
+* An output port in another node `:getResource.contact`
+* A static string representing a type or value, e.g. `true` or `Resource`
 
-Unload:
+**Trigger** (optional, multiple):
+If the function has the ability to activate another node, it is done through a trigger.
 
-1. OnBegin:2
-2. GetNearestContact(Factory) Success:3, Fail:4
-3. Mover.Move(2.Contact)
-4. Transition(idle)
-5. Harvester.OnUnloadFinished:6
-6. Transition(harvest)
+The trigger may not always have a name, e.g. `OnBegin -> :getResource`.
+
+A function may have multiple triggers, e.g.
+```
+If(Harvester.IsFull)
+    .then -> #unload
+    .else -> :findResource
+```
+
+**Expression**:
+The instruction to execute once a triggered is activated.
+
+An expression may be one of the following:
+
+* A state, e.g. `-> #unload`
+* A node label, e.g. `-> :getResource`
+* A function, e.g. `-> Mover.Move(.contact)`
+
+A function expression may not activate any output triggers.
+
+### Example harvester script:
+
+```
+OnInit -> #harvest
+
+#idle
+Radar.OnNewContact(Resource) -> #harvest
+
+#harvest
+OnBegin -> :ifFull
+Harvester.OnEndHarvesting -> :ifFull
+:ifFull If(Harvester.IsFull)
+    .then -> #unload
+    .else -> :getResource
+:getResource Radar.GetNearest(Resource)
+    .success -> :moveToContact
+    .fail -> #idle
+:moveToContact Mover.Move(:getResource.contact)
+
+#unload
+OnBegin -> :getFactory
+:getFactory Radar.GetNearest(Factory)
+    .success -> Mover.Move(.contact)
+    .fail -> #idle
+Harvester.OnEndUnload -> #harvest
+```
+
+**Tokens**
+
+```ebnf
+terminal = "(" | ")" | "," | "->";
+ident    = :alpha: { :alphanum: };
+state    = "#" ident;
+node     = ":" ident;
+port     = "." ident;
+```
+
+In regex:
+
+```
+[(),]|->
+|#[A-Za-z][A-Za-z0-9]*
+|:[A-Za-z][A-Za-z0-9]*
+|\.[A-Za-z][A-Za-z0-9]*
+|[A-Za-z][A-Za-z0-9]*
+```
+
+**Grammar**
+
+```ebnf
+statement  = [ node ], function, { trigger }
+           | state;
+function   = ident, [ port ], [ "(", [ arguments ], ")" ];
+arguments  = reference, { ",", reference };
+reference  = port
+           | ( ident | node ) [ port ]
+trigger    = [ port ], "->", expression;
+expression = state
+           | node [ port ]
+           | function;
+```
