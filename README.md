@@ -38,40 +38,6 @@
 * entity
 * contact type (flags: physical=1, radar=2, swarm=4)
 
-## Scripting
-
-### Actions
-* included with hull:
-  * detach attachable (detaches from grid, but does not remove weight)
-  * attach attachable (must be in storage)
-  * drop attachable
-  * take attachable
-* movement (target may be coordinate or contact):
-  * go to target
-  * orbit around target
-* harvester:
-  * harvest (target is physical contact of type harvestable, e.g. ore)
-* harvester/ore hopper:
-  * dump ore (target is ground or physical contact)
-* weapon (target may be coordinate or contact):
-  * attack target
-
-### Functions
-* get user defined targets (user clicks on location, bot, etc. to set)
-
-### Expressions
-**NOTE: look into unreal's node based scripting**
-
-* if/switch,
-* filter
-* compare
-* arithmetic
-* log
-* of type
-
-### Utilities
-* timer
-
 ## Notes
 
 ### Attachable types
