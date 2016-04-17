@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ScriptEditor", "ScriptEditor.njsproj", "{0F5398F0-4796-4BFD-BFD7-FA441C0C84BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F5398F0-4796-4BFD-BFD7-FA441C0C84BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5398F0-4796-4BFD-BFD7-FA441C0C84BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5398F0-4796-4BFD-BFD7-FA441C0C84BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5398F0-4796-4BFD-BFD7-FA441C0C84BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

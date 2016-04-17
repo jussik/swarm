@@ -1,0 +1,20 @@
+{
+  "name": "swarm-web-editor",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SwarmWebEditor",
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "less": "^2.6.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "typings": "^0.7.12"
+  },
+  "dependencies": {
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  }
+}
