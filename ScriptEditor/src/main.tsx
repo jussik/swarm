@@ -1,8 +1,10 @@
-﻿/// <reference path="../typings/browser.d.ts"/>
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+﻿import "./index.html";
 
-import "file?name=[name].[ext]!./index.html";
-import Editor from "./editor";
+import "./fonts/roboto/roboto.css";
+import "./fonts/material-icons/material-icons.css";
+import "material-design-lite/material.min.js";
 
-ReactDOM.render(<Editor/>, document.getElementById("editor"));
+import "./material.min.css"; // custom colours
+import "./common.scss"
+import "./editor/editor";
+

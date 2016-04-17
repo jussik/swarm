@@ -1,6 +1,8 @@
 {
   "ambientDependencies": {
+    "material-ui": "registry:dt/material-ui#0.14.4+20160412130500",
     "react": "registry:dt/react#0.14.0+20160412154040",
-    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "react-tap-event-plugin": "registry:dt/react-tap-event-plugin#0.0.0+20160226083632"
   }
 }

@@ -9,12 +9,13 @@ module.exports = {
     resolve: {
         extensions: ["", ".webpack.js", ".web.js", ".js", ".ts", ".tsx"]
     },
-    devtool: "inline-source-map",
+    devtool: "source-map",
     module: {
         loaders: [
             { test: /\.tsx?$/, loader: "ts-loader" },
-            { test: /\.less$/, loader: "style!css!less?noIeCompat&strictMath" },
-            { test: /\.woff2?$/, loader : "file-loader?name=[name].[ext]" }
+            { test: /\.css$/, loader: "style!css" },
+            { test: /\.scss$/, loader: "style!css!sass" },
+            { test: /\.(woff2?|ttf|html|png)$/, loader : "file-loader?name=[name].[ext]" }
         ]
     },
     devServer: {
