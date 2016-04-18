@@ -106,13 +106,13 @@ TODO: nested states, variables
 
 Nodes can be *pure* or *non-pure*.
 
-**Pure** nodes include external values or functions which do not affect external state or have failure states (or multiple output states in general). e.g.
+**Pure** nodes include external values or functions which do not affect external state or have failure states (or multiple output states in general). They do not have any triggers. e.g.
 
 * Constants (true, 123)
 * Types (Resource)
 * Provider variables that cannot be altered within the scope of an event (e.g. Harvester.IsFull)
 
-**Non-pure** nodes are those that trigger events, alter shared state, have failure states, or multiple different output states (triggers).
+**Non-pure** nodes are those that trigger events, alter shared state, have failure states, or multiple different output states (triggers). They have at least 1 trigger. e.g.
 
 * Events (OnBegin, Radar.OnNewContact)
 * Methods with side effects (Radar.GetNearest or Mover.MoveTo)
@@ -122,8 +122,7 @@ Nodes can be *pure* or *non-pure*.
 Each node can only have one root source for non-pure (event instigated) inputs.
 i.e. Each port must either be pure or derivable from the same event as the others.
 
-The node type should therefore know if an specific output value is available to nodes initiated by a specific trigger.
-e.g. If casting fails, you should not be able to read the output object.
+All output nodes of pure and activated nodes should have a valid value. e.g. in a Cast node, the output port should provide the original object if the cast fails.
 
 **State**
 
