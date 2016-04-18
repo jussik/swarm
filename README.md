@@ -102,6 +102,29 @@ TODO: nested states, variables
 
 .NET Dataflow: https://msdn.microsoft.com/en-us/library/hh228603(v=vs.110).aspx
 
+**Notes**
+
+Nodes can be *pure* or *non-pure*.
+
+**Pure** nodes include external values or functions which do not affect external state or have failure states (or multiple output states in general). e.g.
+
+* Constants (true, 123)
+* Types (Resource)
+* Provider variables that cannot be altered within the scope of an event (e.g. Harvester.IsFull)
+
+**Non-pure** nodes are those that trigger events, alter shared state, have failure states, or multiple different output states (triggers).
+
+* Events (OnBegin, Radar.OnNewContact)
+* Methods with side effects (Radar.GetNearest or Mover.MoveTo)
+* Flow control (If, While)
+* Functions with failure states (Cast)
+
+Each node can only have one root source for non-pure (event instigated) inputs.
+i.e. Each port must either be pure or derivable from the same event as the others.
+
+The node type should therefore know if an specific output value is available to nodes initiated by a specific trigger.
+e.g. If casting fails, you should not be able to read the output object.
+
 **State**
 
 A *state* encompasses processes and event handlers.
