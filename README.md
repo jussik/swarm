@@ -122,7 +122,7 @@ Nodes can be *pure* or *non-pure*.
 Each node can only have one root source for non-pure (event instigated) inputs.
 i.e. Each port must either be pure or derivable from the same event as the others.
 
-All output nodes of pure and activated nodes should have a valid value. e.g. in a Cast node, the output port should provide the original object if the cast fails.
+All output nodes of pure and activated nodes should have a valid value. e.g. in a Cast node, the output port should provide the original object if the cast fails. *NOTE:* This means the different output triggers may change the type of an output.
 
 **State**
 
