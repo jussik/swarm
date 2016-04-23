@@ -1,0 +1,32 @@
+﻿@import "../common.scss";
+
+.editor-node {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 100px;
+    background: $content-bg;
+    color: $content-fg;
+}
+
+.port {
+    margin: 10px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    line-height: 32px;
+    padding: 0 12px;
+    background: rgba(0,0,0,.1);
+    border-radius: 16px;
+    cursor: pointer;
+}
+.port:hover {
+    background: rgba(0,0,0,.15);
+}
+.port-right {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.port-left {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

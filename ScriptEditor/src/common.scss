@@ -1,13 +1,6 @@
-﻿html {
-    font-family: 'Roboto', 'Helvetica', sans-serif;
-}
-body {
-    margin: 0;
-    font-size: 13px;
-    line-height: 20px;
-    background: #FAFAFA;
-}
-
-#editor {
-    background-image: url('img/grid.png');
-}
+﻿$content-bg: white;
+$content-fg: rgba(0,0,0,.8);
+$base-bg: rgb(96,125,139);
+$base-fg: white;
+$accent-bg: rgb(255,171,64);
+$accent-fg: white;

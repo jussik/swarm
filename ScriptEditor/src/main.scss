@@ -1,0 +1,15 @@
+﻿@import "common.scss";
+
+html {
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 20px;
+    background: rgb(236, 239, 241);
+}
+
+#editor {
+    background-image: url('img/grid.png');
+}
