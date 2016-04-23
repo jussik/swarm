@@ -4,29 +4,45 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    height: 100px;
+    min-height: 126px;
+    width: auto;
     background: $content-bg;
     color: $content-fg;
 }
 
-.port {
-    margin: 10px 0;
-    display: inline-block;
-    box-sizing: border-box;
-    line-height: 32px;
-    padding: 0 12px;
-    background: rgba(0,0,0,.1);
-    border-radius: 16px;
-    cursor: pointer;
+.editor-link {
+    position:absolute;
 }
-.port:hover {
-    background: rgba(0,0,0,.15);
+
+.ports-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.ports {
+    margin: 0;
+    min-width: 26px;
+}
+.ports.ports-left {
+    order: 0;
+}
+.ports.ports-right {
+    order: 1;
+}
+
+.port {
+    padding: 8px;
+}
+.port-icon {
+    margin: 0 5px;
 }
 .port-right {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    padding-right: 0;
 }
 .port-left {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    padding-left: 0;
 }

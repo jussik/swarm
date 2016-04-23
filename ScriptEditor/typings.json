@@ -4,5 +4,8 @@
     "react": "registry:dt/react#0.14.0+20160412154040",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-tap-event-plugin": "registry:dt/react-tap-event-plugin#0.0.0+20160226083632"
+  },
+  "dependencies": {
+    "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958"
   }
 }

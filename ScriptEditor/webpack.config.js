@@ -3,7 +3,7 @@ module.exports = {
     context: path.resolve("./src"),
     entry: "./main",
     output: {
-        path: path.resolve("./www"),
+        path: path.resolve("./wwwroot"),
         filename: "app.js"
     },
     resolve: {
