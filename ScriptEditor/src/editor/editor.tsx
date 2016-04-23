@@ -16,14 +16,12 @@ export default class Editor extends React.Component<{}, { nodes: ScriptNode[] }>
     componentDidMount() {
         var s0 = new ScriptNode();
         s0.name = "On Begin";
-        s0.x = 50;
-        s0.y = 20;
+        s0.pos = { x: 50, y: 20 };
         var trig0 = s0.addOutput("", true);
 
         var s1 = new ScriptNode();
         s1.name = "Nearest Contact";
-        s1.x = 250;
-        s1.y = 80;
+        s1.pos = { x: 250, y: 80 };
         var in1 = s1.addInput("Input Trigger", true);
         s1.addInput("Input Value", false);
         var trig1 = s1.addOutput("Output Trigger", true);
@@ -31,8 +29,7 @@ export default class Editor extends React.Component<{}, { nodes: ScriptNode[] }>
 
         var s2 = new ScriptNode();
         s2.name = "Move To";
-        s2.x = 700;
-        s2.y = 40;
+        s2.pos = { x: 700, y: 40 };
         var trig2 = s2.addInput("Input Trigger", true);
         var in2 = s2.addInput("Target", false);
 

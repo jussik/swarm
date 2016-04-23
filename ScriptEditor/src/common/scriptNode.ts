@@ -72,10 +72,31 @@ export class NodePort extends ImplicitId {
 
 export class ScriptNode extends ImplicitId {
     name: string;
-    x: number;
-    y: number;
+    pos: Point;
     inputs: NodePort[];
     outputs: NodePort[];
+
+    // TODO: make property changed event decorator mixin
+    private _pos: Point;
+    get pos() {
+        return this._pos;
+    }
+    set pos(val: Point) {
+        this._pos = val;
+        if (this.watchers != null)
+            this.watchers.forEach(h => h(val));
+    }
+    private watchers: EventHandler<Point>[];
+    watch(handler: EventHandler<Point>) {
+        if (this.watchers == null)
+            this.watchers = [];
+        this.watchers.push(handler);
+        return () => {
+            var ix = this.watchers.indexOf(handler);
+            if (ix != -1)
+                this.watchers.splice(ix, 1);
+        }
+    }
 
     constructor() {
         super();
