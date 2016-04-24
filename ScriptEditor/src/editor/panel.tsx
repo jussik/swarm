@@ -3,10 +3,10 @@ import * as React from "react";
 
 import EditorNode from "./node";
 import EditorLink from "./link";
-import {ScriptNode, PortFlags} from "../common/scriptNode";
+import Node from "../common/node";
 
 interface IPanelProps {
-    nodes: ScriptNode[];
+    nodes: Node[];
 }
 
 export default class EditorPanel extends React.Component<IPanelProps, {}> {

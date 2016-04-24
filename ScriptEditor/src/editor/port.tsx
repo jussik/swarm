@@ -3,10 +3,10 @@ import * as React from "react";
 
 import EditorPanel from "./panel";
 import {Point} from "../common/common";
-import {NodePort, PortFlags} from "../common/scriptNode";
+import Port from "../common/port";
 
 interface IPortProps {
-    port: NodePort;
+    port: Port;
 }
 
 export default class EditorPort extends React.Component<IPortProps, {}> {
@@ -25,7 +25,7 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
         var offset = this.context.getEditorOffset();
         var rect = button.getBoundingClientRect();
         var style = getComputedStyle(button);
-        var width = (this.props.port.flags & PortFlags.Input) > 0
+        var width = this.props.port.isInput
             ? -parseInt(style.marginLeft)
             : rect.width + parseInt(style.marginRight);
         this.props.port.pos = {
@@ -36,7 +36,7 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
     render() {
         var port = this.props.port;
         var isConnected = port.links.length > 0;
-        var buttonIcon = (port.flags & PortFlags.Trigger) > 0
+        var buttonIcon = port.isTrigger
             ? "play_circle_" + (isConnected ? "filled" : "outline")
             : "radio_button_" + (isConnected ? "checked" : "unchecked");
         var button = (
@@ -45,7 +45,7 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
                 <i className="material-icons">{buttonIcon}</i>
             </button>
         );
-        return (port.flags & PortFlags.Input) > 0 ? (
+        return port.isInput ? (
             <li className="port port-left mdl-list__item">
                 <span className="mdl-list__item-primary-content">
                     {button}

@@ -5,13 +5,14 @@ import * as React from "react";
 import * as Draggabilly from "draggabilly";
 
 
-import {ScriptNode, NodePort, PortFlags} from "../common/scriptNode";
+import Node from "../common/node";
+import Port from "../common/port";
 import EditorPanel from "./panel";
 import EditorPort from "./port";
 import "./node.scss";
 
 interface INodeProps {
-    node: ScriptNode;
+    node: Node;
 }
 
 export default class EditorNode extends React.Component<INodeProps, {}> {
@@ -26,7 +27,7 @@ export default class EditorNode extends React.Component<INodeProps, {}> {
     }
     render() {
         var node = this.props.node;
-        var makePort = (p: NodePort) => <EditorPort key={p.id} port={p} />;
+        var makePort = (p: Port) => <EditorPort key={p.id} port={p} />;
         return (
             <div className="editor-node mdl-card mdl-shadow--2dp" style={{left:node.pos.x,top:node.pos.y}} ref="node">
                 <div className="title mdl-card__title mdl-card--border">

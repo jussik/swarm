@@ -2,10 +2,10 @@
 import * as React from "react";
 
 import {Point} from "../common/common";
-import {NodeLink} from "../common/scriptNode";
+import Link from "../common/link";
 
 interface ILinkProps {
-    link: NodeLink;
+    link: Link;
 }
 interface ILinkState {
     src?: Point;
@@ -40,28 +40,28 @@ export default class EditorLink extends React.Component<ILinkProps, ILinkState> 
             return null;
 
         var dx = dest.x - src.x;
-        var h = dx > 0
+        var handle = dx > 0
             ? Math.max(dx / 2, 80)
             : 80
-        var c = [
+        var coefs = [
             src,
-            { x: src.x + h, y: src.y },
-            { x: dest.x - h, y: dest.y },
+            { x: src.x + handle, y: src.y },
+            { x: dest.x - handle, y: dest.y },
             dest
         ];
         var min = {
-            x: Math.min(src.x, c[2].x),
+            x: Math.min(src.x, coefs[2].x),
             y: Math.min(src.y, dest.y),
         };
         var max = {
-            x: Math.max(c[1].x, dest.x),
+            x: Math.max(coefs[1].x, dest.x),
             y: Math.max(src.y, dest.y)
         }
-        var o = 5;
-        var s = c.map(p => `${p.x - min.x + o} ${p.y - min.y + o}`);
+        var margin = 5;
+        var str = coefs.map(p => `${p.x - min.x + margin} ${p.y - min.y + margin}`);
         return (
-            <svg width={max.x - min.x + 2 * o} height={max.y - min.y + 2 * o} className="editor-link" style={{ left: min.x - o, top: min.y - o }}>
-                <path d={`M${s[0]} C${s[1]}, ${s[2]}, ${s[3]}`}
+            <svg width={max.x - min.x + 2 * margin} height={max.y - min.y + 2 * margin} className="editor-link" style={{ left: min.x - margin, top: min.y - margin }}>
+                <path d={`M${str[0]} C${str[1]}, ${str[2]}, ${str[3]}`}
                     stroke="rgba(0,0,0,.5)" strokeWidth="3" strokeLinecap="flat" fill="transparent"/>
             </svg>
         );

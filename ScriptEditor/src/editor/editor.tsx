@@ -5,21 +5,21 @@ import * as ReactDOM from "react-dom";
 import EditorDrawer from "./drawer";
 import EditorPanel from "./panel";
 import EditorHeader from "./header";
-import {ScriptNode, PortFlags} from "../common/scriptNode";
+import Node from "../common/node";
 
-export default class Editor extends React.Component<{}, { nodes: ScriptNode[] }> {
+export default class Editor extends React.Component<{}, { nodes: Node[] }> {
     constructor() {
         super();
         this.state = { nodes: [] };
     }
 
     componentDidMount() {
-        var s0 = new ScriptNode();
+        var s0 = new Node();
         s0.name = "On Begin";
         s0.pos = { x: 50, y: 20 };
         var trig0 = s0.addOutput("", true);
 
-        var s1 = new ScriptNode();
+        var s1 = new Node();
         s1.name = "Nearest Contact";
         s1.pos = { x: 250, y: 80 };
         var in1 = s1.addInput("Input Trigger", true);
@@ -27,7 +27,7 @@ export default class Editor extends React.Component<{}, { nodes: ScriptNode[] }>
         var trig1 = s1.addOutput("Output Trigger", true);
         var out1 = s1.addOutput("Contact", false);
 
-        var s2 = new ScriptNode();
+        var s2 = new Node();
         s2.name = "Move To";
         s2.pos = { x: 700, y: 40 };
         var trig2 = s2.addInput("Input Trigger", true);
