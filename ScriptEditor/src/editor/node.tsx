@@ -22,6 +22,7 @@ export default class EditorNode extends React.Component<INodeProps, {}> {
             containment: "main"
         });
         drag.on("dragMove", (ev, ptr, drag) => this.props.node.pos = { x: node.offsetLeft + drag.x, y: node.offsetTop + drag.y });
+        drag.on("dragEnd", () => this.props.node.pos = { x: node.offsetLeft, y: node.offsetTop });
     }
     render() {
         var node = this.props.node;

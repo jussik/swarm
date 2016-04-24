@@ -24,8 +24,12 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
         var button = this.refs["button"] as HTMLElement;
         var offset = this.context.getEditorOffset();
         var rect = button.getBoundingClientRect();
+        var style = getComputedStyle(button);
+        var width = (this.props.port.flags & PortFlags.Input) > 0
+            ? -parseInt(style.marginLeft)
+            : rect.width + parseInt(style.marginRight);
         this.props.port.pos = {
-            x: rect.left - offset.x + rect.width / 2,
+            x: rect.left - offset.x + width,
             y: rect.top - offset.y + rect.height / 2
         };
     }

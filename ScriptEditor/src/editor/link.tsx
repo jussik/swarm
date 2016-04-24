@@ -39,41 +39,30 @@ export default class EditorLink extends React.Component<ILinkProps, ILinkState> 
         if (src == null || dest == null)
             return null;
 
-        var x1 = src.x;
-        var y1 = src.y;
-        var x2 = dest.x;
-        var y2 = dest.y;
-
-        var left = x1, top = y1;
-        var p = 3;
-
-        var width = x2 - x1;
-        if (width >= 0) {
-            x1 = p;
-            x2 = width + p;
-        } else {
-            width = -width;
-            left = x2;
-            x1 = width + p;
-            x2 = p;
+        var dx = dest.x - src.x;
+        var h = dx > 0
+            ? Math.max(dx / 2, 80)
+            : 80
+        var c = [
+            src,
+            { x: src.x + h, y: src.y },
+            { x: dest.x - h, y: dest.y },
+            dest
+        ];
+        var min = {
+            x: Math.min(src.x, c[2].x),
+            y: Math.min(src.y, dest.y),
+        };
+        var max = {
+            x: Math.max(c[1].x, dest.x),
+            y: Math.max(src.y, dest.y)
         }
-
-        var height = y2 - y1;
-        if (height >= 0) {
-            y1 = p;
-            y2 = height + p;
-        } else {
-            height = -height;
-            top = y2;
-            y1 = height + p;
-            y2 = p;
-        }
-
-        var h = Math.max(width / 2, 80);
+        var o = 5;
+        var s = c.map(p => `${p.x - min.x + o} ${p.y - min.y + o}`);
         return (
-            <svg width={width + 2 * p} height={height + 2 * p} className="editor-link" style={{ left: left - p, top: top - p }}>
-                <path d={`M${x1} ${y1} C${x1 + h} ${y1}, ${x2 - h} ${y2}, ${x2} ${y2}`}
-                    stroke="rgba(0,0,0,.5)" strokeWidth="3" strokeLinecap="round" fill="transparent"/>
+            <svg width={max.x - min.x + 2 * o} height={max.y - min.y + 2 * o} className="editor-link" style={{ left: min.x - o, top: min.y - o }}>
+                <path d={`M${s[0]} C${s[1]}, ${s[2]}, ${s[3]}`}
+                    stroke="rgba(0,0,0,.5)" strokeWidth="3" strokeLinecap="flat" fill="transparent"/>
             </svg>
         );
     }
