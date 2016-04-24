@@ -20,13 +20,14 @@ export default class EditorLink extends React.Component<ILinkProps, ILinkState> 
 
     private watchers: (() => void)[];
     componentDidMount() {
+        var link = this.props.link;
         this.watchers = [
-            this.props.link.src.watch(pos => this.setState({ src: pos })),
-            this.props.link.dest.watch(pos => this.setState({ dest: pos }))
+            link.src.watch("pos", pos => this.setState({ src: pos })),
+            link.dest.watch("pos", pos => this.setState({ dest: pos }))
         ];
         this.setState({
-            src: this.props.link.src.pos,
-            dest: this.props.link.dest.pos,
+            src: link.src.pos,
+            dest: link.dest.pos,
         });
     }
     componentWillUnmount() {

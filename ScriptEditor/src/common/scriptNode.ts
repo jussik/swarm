@@ -1,17 +1,12 @@
-﻿import {Point} from "./common";
+﻿/// <reference path="../../typings/browser.d.ts"/>
+import {Point, identity, watchable, watch, IWatchable} from "./common";
 
-// TODO: make decorator mixin
-class ImplicitId {
-    id = ++ImplicitId.idCounter;
-    static idCounter = 0;
-}
-
-export class NodeLink extends ImplicitId {
+export class NodeLink {
+    @identity id: number;
     src: NodePort;
     dest: NodePort;
 
     constructor(port1: NodePort, port2: NodePort) {
-        super();
         if ((port1.flags & PortFlags.Input) > 0) {
             this.src = port2;
             this.dest = port1;
@@ -28,37 +23,17 @@ export enum PortFlags {
     Trigger = 4,
     Value = 8
 }
-interface EventHandler<T> { (args: T): void }
-export class NodePort extends ImplicitId {
+export interface NodePort extends IWatchable { }
+@watchable
+export class NodePort {
+    @identity id: number;
     name: string;
     node: ScriptNode;
     flags: PortFlags;
     links: NodeLink[];
-
-    // TODO: make property changed event decorator mixin
-    private _pos: Point;
-    get pos() {
-        return this._pos;
-    }
-    set pos(val: Point) {
-        this._pos = val;
-        if (this.watchers != null)
-            this.watchers.forEach(h => h(val));
-    }
-    private watchers: EventHandler<Point>[];
-    watch(handler: EventHandler<Point>) {
-        if (this.watchers == null)
-            this.watchers = [];
-        this.watchers.push(handler);
-        return () => {
-            var ix = this.watchers.indexOf(handler);
-            if (ix != -1)
-                this.watchers.splice(ix, 1);
-        }
-    }
+    @watch pos: Point;
 
     constructor() {
-        super();
         this.links = [];
     }
     connect(port: NodePort): NodeLink {
@@ -70,36 +45,16 @@ export class NodePort extends ImplicitId {
     }
 }
 
-export class ScriptNode extends ImplicitId {
+export interface ScriptNode extends IWatchable { }
+@watchable
+export class ScriptNode {
+    @identity id: number;
     name: string;
-    pos: Point;
     inputs: NodePort[];
     outputs: NodePort[];
-
-    // TODO: make property changed event decorator mixin
-    private _pos: Point;
-    get pos() {
-        return this._pos;
-    }
-    set pos(val: Point) {
-        this._pos = val;
-        if (this.watchers != null)
-            this.watchers.forEach(h => h(val));
-    }
-    private watchers: EventHandler<Point>[];
-    watch(handler: EventHandler<Point>) {
-        if (this.watchers == null)
-            this.watchers = [];
-        this.watchers.push(handler);
-        return () => {
-            var ix = this.watchers.indexOf(handler);
-            if (ix != -1)
-                this.watchers.splice(ix, 1);
-        }
-    }
+    @watch pos: Point;
 
     constructor() {
-        super();
         this.inputs = [];
         this.outputs = [];
     }

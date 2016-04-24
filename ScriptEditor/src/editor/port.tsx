@@ -14,7 +14,7 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
     static contextTypes = { getEditorOffset: React.PropTypes.func.isRequired };
     unwatch: () => void;
     componentDidMount() {
-        this.unwatch = this.props.port.node.watch(this.calculatePos.bind(this));
+        this.unwatch = this.props.port.node.watch("pos", this.calculatePos.bind(this));
         this.calculatePos();
     }
     componentWillUnmount() {

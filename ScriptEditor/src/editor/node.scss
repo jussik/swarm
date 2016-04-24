@@ -10,7 +10,7 @@
     color: $content-fg;
 
     &.is-dragging {
-        opacity: .75;
+        background-color: rgba($content-bg, 0.8);
     }
     > .title {
         cursor: move;

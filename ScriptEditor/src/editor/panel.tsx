@@ -25,20 +25,11 @@ export default class EditorPanel extends React.Component<IPanelProps, {}> {
     }
     render() {
         var nodes = this.props.nodes;
-        var links: JSX.Element[] = [];
-        for (var node of nodes) {
-            for (var port of node.outputs) {
-                for (var link of port.links) {
-                    links.push(<EditorLink link={link} />)
-                }
-            }
-        }
         return (
             <main className="mdl-layout__content" id="editor" ref="editor">
                 <div>
                     {nodes.map(n => <EditorNode key={n.id} node={n} />) }
-                    {/*links*/}
-                    {nodes.map(n => n.outputs.map(p => p.links.map(l => <EditorLink link={l} />))) }
+                    {nodes.map(n => n.outputs.map(p => p.links.map(l => <EditorLink key={l.id} link={l} />))) }
                 </div>
             </main>
         );
