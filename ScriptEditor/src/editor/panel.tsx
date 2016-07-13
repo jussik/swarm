@@ -4,6 +4,8 @@ import * as React from "react";
 import EditorNode from "./node";
 import EditorLink from "./link";
 import Node from "../common/node";
+import Port from "../common/port";
+import Link from "../common/link";
 
 interface IPanelProps {
     nodes: Node[];

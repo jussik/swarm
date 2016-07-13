@@ -1,6 +1,6 @@
 ﻿@import "../common.scss";
 
-.editor-node {
+.node {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -12,12 +12,12 @@
     &.is-dragging {
         background-color: rgba($content-bg, 0.8);
     }
-    > .title {
-        cursor: move;
-    }
+}
+.node-title {
+    cursor: move;
 }
 
-.editor-link {
+.link {
     position:absolute;
 }
 
@@ -29,27 +29,32 @@
 .ports {
     margin: 0;
     min-width: 26px;
-}
-.ports.ports-left {
-    order: 0;
-}
-.ports.ports-right {
-    order: 1;
+    &.ports-left {
+        order: 0;
+    }
+    &.ports-right {
+        order: 1;
+    }
 }
 
 .port {
     padding: 8px;
+    &.port-right {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        padding-right: 0;
+    }
+    &.port-left {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        padding-left: 0;
+    }
 }
 .port-icon {
     margin: 0 5px;
-}
-.port-right {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    padding-right: 0;
-}
-.port-left {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    padding-left: 0;
+    &.is-dragging {
+        left: 0 !important;
+        top: 0 !important;
+        transform: initial !important;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../typings/browser.d.ts"/>
 import * as React from "react";
+import * as Draggabilly from "draggabilly";
 
 import EditorPanel from "./panel";
 import {Point} from "../common/common";
@@ -14,6 +15,11 @@ export default class EditorPort extends React.Component<IPortProps, {}> {
     static contextTypes = { getEditorOffset: React.PropTypes.func.isRequired };
     unwatch: () => void;
     componentDidMount() {
+        var button = this.refs["button"] as HTMLElement;
+        var drag = new Draggabilly(button, {
+            containment: "main"
+        });
+        drag.on("dragEnd", () => { button.style.left = ""; button.style.top = ""; });
         this.unwatch = this.props.port.node.watch("pos", this.calculatePos.bind(this));
         this.calculatePos();
     }

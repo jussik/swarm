@@ -40,9 +40,7 @@ export default class EditorLink extends React.Component<ILinkProps, ILinkState> 
             return null;
 
         var dx = dest.x - src.x;
-        var handle = dx > 0
-            ? Math.max(dx / 2, 80)
-            : 80
+        var handle = Math.max(dx / 2, 80);
         var coefs = [
             src,
             { x: src.x + handle, y: src.y },
@@ -60,7 +58,8 @@ export default class EditorLink extends React.Component<ILinkProps, ILinkState> 
         var margin = 5;
         var str = coefs.map(p => `${p.x - min.x + margin} ${p.y - min.y + margin}`);
         return (
-            <svg width={max.x - min.x + 2 * margin} height={max.y - min.y + 2 * margin} className="editor-link" style={{ left: min.x - margin, top: min.y - margin }}>
+            <svg width={max.x - min.x + 2 * margin} height={max.y - min.y + 2 * margin}
+                className="link" style={{ left: min.x - margin, top: min.y - margin }}>
                 <path d={`M${str[0]} C${str[1]}, ${str[2]}, ${str[3]}`}
                     stroke="rgba(0,0,0,.5)" strokeWidth="3" strokeLinecap="flat" fill="transparent"/>
             </svg>
