@@ -1,9 +1,13 @@
 {
   "ambientDependencies": {
+    "core-js": "registry:dt/core-js#0.0.0+20160602141332",
     "material-ui": "registry:dt/material-ui#0.14.4+20160412130500",
     "react": "registry:dt/react#0.14.0+20160412154040",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
-    "react-tap-event-plugin": "registry:dt/react-tap-event-plugin#0.0.0+20160226083632"
+    "react-redux": "registry:dt/react-redux#4.4.0+20160703120921",
+    "react-tap-event-plugin": "registry:dt/react-tap-event-plugin#0.0.0+20160226083632",
+    "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "redux-actions": "registry:dt/redux-actions#0.8.0+20160521154116"
   },
   "dependencies": {
     "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958"

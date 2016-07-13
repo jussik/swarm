@@ -7,4 +7,4 @@ import "material-design-lite/material.min.js";
 import "./material.min.css"; // custom colours
 import "./main.scss";
 import "./editor/editor";
-
+import "./store";
