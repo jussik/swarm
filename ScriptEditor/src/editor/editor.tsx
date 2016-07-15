@@ -1,11 +1,55 @@
 ﻿/// <reference path="../../typings/browser.d.ts"/>
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import {Provider, connect} from "react-redux";
 
 import EditorDrawer from "./drawer";
 import EditorPanel from "./panel";
 import EditorHeader from "./header";
 import Node from "../common/node";
+import store from "../store";
+
+import {NewNode, Node as NodeData, addNode} from "../store/nodes";
+import {reset} from "../store/editor";
+
+interface INodeProps {
+    node: NodeData;
+}
+
+class NodeView extends React.Component<INodeProps, {}> {
+    render() {
+        var n = this.props.node;
+        return <div>{n.id}: {n.x}, {n.y}</div>;
+    }
+}
+type ActionProp<T> = (...payloads: T[])=>ReduxActions.Action<T>;
+interface IStateInfoStateProps {
+    nodes: NodeData[];
+}
+interface IStateInfoDispatchProps {
+    onAddNode: ActionProp<NewNode>;
+    onReset: ActionProp<any>;
+}
+class StoreInfo extends React.Component<IStateInfoStateProps & IStateInfoDispatchProps, {}> {
+    render() {
+        const onAddNode = this.props.onAddNode.bind(this, {x:4,y:99});
+        const onReset = this.props.onReset.bind(this);
+        return (
+            <div>
+                Nodes:
+                { this.props.nodes.map(n => <NodeView key={n.id} node={n} />) }
+                <div><a onClick={onAddNode} style={{cursor:"pointer"}}>Add</a></div>
+                <div><a onClick={onReset} style={{cursor:"pointer"}}>Reset</a></div>
+            </div>
+        );
+    }
+}
+const StoreInfoRedux = connect<IStateInfoStateProps,IStateInfoDispatchProps,any>(state => ({
+    nodes: state.nodes
+}), dispatch => ({
+    onAddNode: node => dispatch(addNode(node)),
+    onReset: () => dispatch(reset())
+}))(StoreInfo);
 
 export default class Editor extends React.Component<{}, { nodes: Node[] }> {
     constructor() {
@@ -50,4 +94,9 @@ export default class Editor extends React.Component<{}, { nodes: Node[] }> {
     }
 }
 
-ReactDOM.render(<Editor/>, document.getElementById("main"));
+//ReactDOM.render(<Provider store={store}>
+//    <Editor/>
+//</Provider>, document.getElementById("main"));
+ReactDOM.render(<Provider store={store}>
+    <StoreInfoRedux/>
+</Provider>, document.getElementById("main"));
