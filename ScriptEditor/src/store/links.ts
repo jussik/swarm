@@ -9,6 +9,8 @@ export const CONNECT = "links/CONNECT";
 export const DISCONNECT = "links/DISCONNECT";
 export const RANDOM_LINK = "links/RANDOM_LINK";
 
+export type ILinksState = Link[];
+
 export interface NewLink {
     fromNode: number;
     //fromPort: number;

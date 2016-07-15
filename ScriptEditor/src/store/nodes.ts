@@ -4,6 +4,8 @@ import * as assign from "core-js/library/fn/object/assign";
 
 import {RESET, STATE_LOADED} from "./editor";
 
+export type INodesState = Node[];
+
 export interface NewNode {
     x: number;
     y: number;

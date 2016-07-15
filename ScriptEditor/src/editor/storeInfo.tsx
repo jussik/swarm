@@ -2,7 +2,9 @@
 import * as React from "react";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
+import {createSelector} from "reselect";
 
+import {IStoreState} from "../store/index"; // redundant /index required by ReSharper for some reason
 import {NewNode, Node, addNode} from "../store/nodes";
 import {addRandomLink, removeLink, Link} from "../store/links";
 import {reset} from "../store/editor";
@@ -17,16 +19,23 @@ class NodeView extends React.Component<INodeProps & INodeStateProps, {}> {
     render() {
         const node = this.props.node;
         return <div>
-            {node.id}: {node.x}, {node.y}{" "}
-            [{ this.props.links.map(l => l.id).join(", ") }]
+            {node.id}: {node.x}, {node.y} [{
+                this.props.links.map(l => l.id).join(", ")
+            }]
         </div>;
     }
 }
 
-const nodeViewMapStateToProps = (state: any, props: INodeProps) => ({
-    // TODO: memoize using reselect
-    links: state.links.filter((l: Link) => l.fromNode === props.node.id || l.toNode === props.node.id)
-});
+const nodeLinksSelectorFactory = () => createSelector(
+    (state: IStoreState) => state.links,
+    (state: IStoreState, props: INodeProps) => props.node.id,
+    (links: Link[], nodeId: number) => links.filter((l: Link) => l.fromNode === nodeId || l.toNode === nodeId));
+const nodeViewMapStateToProps = () => {
+    const nodeLinksSelector = nodeLinksSelectorFactory();
+    return (state: IStoreState, props: INodeProps) => ({
+        links: nodeLinksSelector(state, props)
+    });
+};
 const NodeViewRedux = connect<INodeStateProps, {}, INodeProps>(nodeViewMapStateToProps)(NodeView);
 
 interface ILinkProps {
@@ -62,11 +71,11 @@ interface IStateInfoDispatchProps {
     onAddLink: ActionProp<Node[]>;
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IStoreState) => ({
     nodes: state.nodes,
     links: state.links
 });
-const mapDispatchToProps = (dispatch: Redux.Dispatch<any>) => ({
+const mapDispatchToProps = (dispatch: Redux.Dispatch<IStoreState>) => ({
     onAddNode: (node: NewNode) => dispatch(addNode(node)),
     onReset: () => dispatch(reset()),
     onAddLink: (nodes: Node[]) => dispatch(addRandomLink(nodes))
