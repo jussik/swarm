@@ -4,28 +4,52 @@ import {Dispatch} from "redux";
 import {connect} from "react-redux";
 
 import {NewNode, Node, addNode} from "../store/nodes";
-import {addRandomLink, Link} from "../store/links";
+import {addRandomLink, removeLink, Link} from "../store/links";
 import {reset} from "../store/editor";
 
 interface INodeProps {
     node: Node;
 }
-class NodeView extends React.Component<INodeProps, {}> {
+interface INodeStateProps {
+    links: Link[];
+}
+class NodeView extends React.Component<INodeProps & INodeStateProps, {}> {
     render() {
-        const n = this.props.node;
-        return <div>{n.id}: {n.x}, {n.y}</div>;
+        const node = this.props.node;
+        return <div>
+            {node.id}: {node.x}, {node.y}{" "}
+            [{ this.props.links.map(l => l.id).join(", ") }]
+        </div>;
     }
 }
+
+const nodeViewMapStateToProps = (state: any, props: INodeProps) => ({
+    // TODO: memoize using reselect
+    links: state.links.filter((l: Link) => l.fromNode === props.node.id || l.toNode === props.node.id)
+});
+const NodeViewRedux = connect<INodeStateProps, {}, INodeProps>(nodeViewMapStateToProps)(NodeView);
 
 interface ILinkProps {
     link: Link;
 }
-class LinkView extends React.Component<ILinkProps, {}> {
+interface ILinkDispatchProps {
+    onRemoveLink: ActionProp<number>;
+}
+class LinkView extends React.Component<ILinkDispatchProps & ILinkProps, {}> {
     render() {
-        const l = this.props.link;
-        return <div>{l.id}: {l.fromNode} -> {l.toNode}</div>;
+        const link = this.props.link;
+        const onRemoveLink = this.props.onRemoveLink.bind(this, link.id);
+        return <div>
+            {link.id}: {link.fromNode} -> {link.toNode}
+            <strong onClick={onRemoveLink} style={{ color: "red", cursor: "pointer" }}> &times;</strong>
+        </div>;
     }
 }
+
+const linkViewMapDispatchToProps = (dispatch: Redux.Dispatch<any>) => ({
+    onRemoveLink: (id: number) => dispatch(removeLink(id))
+});
+const LinkViewRedux = connect<{}, ILinkDispatchProps, ILinkProps>(null, linkViewMapDispatchToProps)(LinkView);
 
 type ActionProp<T> = (...payloads: T[]) => ReduxActions.Action<T>;
 interface IStateInfoStateProps {
@@ -38,7 +62,7 @@ interface IStateInfoDispatchProps {
     onAddLink: ActionProp<Node[]>;
 }
 
-const mapStateToProps = (state: IStateInfoStateProps) => ({
+const mapStateToProps = (state: any) => ({
     nodes: state.nodes,
     links: state.links
 });
@@ -56,10 +80,10 @@ class StoreInfo extends React.Component<IStateInfoStateProps & IStateInfoDispatc
         return (
             <div>
                 Nodes:
-                { this.props.nodes.map(n => <NodeView key={n.id} node={n} />) }
+                { this.props.nodes.map(n => <NodeViewRedux key={n.id} node={n} />) }
                 <div><a onClick={onAddNode} style={{ cursor: "pointer" }}>Add</a></div>
                 Links:
-                { this.props.links.map(l => <LinkView key={l.id} link={l} />) }
+                { this.props.links.map(l => <LinkViewRedux key={l.id} link={l} />) }
                 <div><a onClick={onAddLink} style={{ cursor: "pointer" }}>Add Link</a></div>
                 <div><a onClick={onReset} style={{ cursor: "pointer" }}>Reset Data</a></div>
             </div>
